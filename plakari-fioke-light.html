@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html lang="sr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Plakari & Fioke</title>
+
+<!-- PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Plakari & Fioke">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#b5622a">
+<meta name="description" content="Kalkulator za nameštaj — krojne liste, magacin, narudžbe">
+
+<!-- Apple touch icons (inline SVG → data URI) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%23b5622a'/%3E%3Ctext x='256' y='340' font-size='260' text-anchor='middle' font-family='Georgia,serif' fill='white'%3EP%26F%3C/text%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%23b5622a'/%3E%3Ctext x='256' y='340' font-size='260' text-anchor='middle' font-family='Georgia,serif' fill='white'%3EP%26F%3C/text%3E%3C/svg%3E">
+
+<!-- Manifest inline -->
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22Plakari%20%26%20Fioke%22%2C%22short_name%22%3A%22P%26F%22%2C%22description%22%3A%22Kalkulator%20za%20namešt aj%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23f5f2ed%22%2C%22theme_color%22%3A%22%23b5622a%22%2C%22orientation%22%3A%22portrait%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%2520viewBox%3D'0%25200%2520512%2520512'%253E%253Crect%2520width%3D'512'%2520height%3D'512'%2520rx%3D'80'%2520fill%3D'%2523b5622a'%2F%253E%253C%2Fsvg%253E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%7D%5D%7D">
+
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Epilogue:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f5f2ed;
+    --bg2: #ede9e2;
+    --surface: #ffffff;
+    --surface2: #faf8f5;
+    --border: #e2ddd6;
+    --border2: #d0c9bf;
+    --accent: #b5622a;
+    --accent2: #d4774f;
+    --accent-bg: #fdf0e8;
+    --text: #1e1a16;
+    --text-dim: #7a6f65;
+    --text-muted: #b0a898;
+    --green: #3a7d5c;
+    --green-bg: #edf7f2;
+    --red: #c0392b;
+    --red-bg: #fdf0ee;
+    --orange: #c06820;
+    --orange-bg: #fef4e8;
+    --blue: #2c6ea0;
+    --blue-bg: #eaf3fb;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow: 0 4px 16px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.05);
+    --serif: 'Instrument Serif', Georgia, serif;
+    --sans: 'Epilogue', sans-serif;
+    --radius: 8px;
+    --radius-sm: 5px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  /* subtle linen texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .logo {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--text);
+    letter-spacing: 0.01em;
+  }
+  .logo em { color: var(--accent); font-style: italic; }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .status-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: var(--green-bg);
+    border: 1px solid rgba(58,125,92,0.2);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--green);
+    letter-spacing: 0.04em;
+  }
+
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: blink 2.5s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .version {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  /* NAV */
+  .nav-tabs {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    padding: 0 32px;
+    gap: 0;
+    overflow-x: auto;
+  }
+
+  .tab {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dim);
+    padding: 14px 20px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    letter-spacing: 0.01em;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
+
+  .tab-icon {
+    width: 18px; height: 18px;
+    opacity: 0.6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .tab.active .tab-icon { opacity: 1; }
+
+  /* MAIN */
+  main {
+    padding: 32px;
+    max-width: 1360px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* PAGE TRANSITIONS */
+  .page { display: none; }
+  .page.active { display: block; animation: slideUp 0.28s ease; }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* PAGE HEADER */
+  .page-header {
+    margin-bottom: 28px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .page-title {
+    font-family: var(--serif);
+    font-size: 30px;
+    color: var(--text);
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+  }
+
+  .page-subtitle {
+    font-size: 13px;
+    color: var(--text-dim);
+    margin-top: 5px;
+    font-weight: 400;
+  }
+
+  /* CARD */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 16px;
+  }
+
+  .card-title {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title-dot {
+    width: 8px; height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* GRID */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+
+  @media (max-width: 1100px) { .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 900px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+    main { padding: 20px 16px; }
+    .nav-tabs { padding: 0 16px; }
+    header { padding: 0 16px; }
+  }
+  @media (max-width: 480px) { .grid-4 { grid-template-columns: 1fr 1fr; } }
+
+  /* FORM */
+  .form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+
+  label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  select {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 13px;
+    padding: 9px 12px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+
+  input:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(181,98,42,0.1);
+  }
+
+  input::placeholder { color: var(--text-muted); }
+
+  /* CUSTOM SELECT ARROW */
+  .form-group { position: relative; }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23b0a898'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 28px;
+    cursor: pointer;
+  }
+
+  input[type="checkbox"] {
+    width: 16px; height: 16px;
+    accent-color: var(--accent);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  /* BUTTONS */
+  .btn {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 10px 20px;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.18s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(181,98,42,0.25);
+  }
+  .btn-primary:hover {
+    background: var(--accent2);
+    box-shadow: 0 4px 14px rgba(181,98,42,0.35);
+    transform: translateY(-1px);
+  }
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    background: var(--bg2);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--border); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--accent);
+    border: 1.5px solid var(--accent);
+  }
+  .btn-ghost:hover { background: var(--accent-bg); }
+
+  .btn-danger {
+    background: transparent;
+    color: var(--red);
+    border: 1.5px solid rgba(192,57,43,0.3);
+  }
+  .btn-danger:hover { background: var(--red-bg); }
+
+  .btn-sm { padding: 6px 14px; font-size: 11px; }
+
+  /* STAT CARDS */
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    position: relative;
+    overflow: hidden;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+
+  .stat-card:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+  }
+
+  .stat-card-stripe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    border-radius: var(--radius) 0 0 var(--radius);
+  }
+
+  .stat-card.ok .stat-card-stripe { background: var(--green); }
+  .stat-card.warn .stat-card-stripe { background: var(--orange); }
+  .stat-card.danger .stat-card-stripe { background: var(--red); }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+    padding-left: 8px;
+  }
+
+  .stat-value {
+    font-family: var(--serif);
+    font-size: 34px;
+    line-height: 1;
+    margin-bottom: 4px;
+    padding-left: 8px;
+  }
+
+  .stat-value.ok { color: var(--green); }
+  .stat-value.warn { color: var(--orange); }
+  .stat-value.danger { color: var(--red); }
+  .stat-value.accent { color: var(--accent); }
+
+  .stat-unit {
+    font-size: 11px;
+    color: var(--text-muted);
+    padding-left: 8px;
+    margin-bottom: 10px;
+  }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--bg2);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-left: 8px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    border-radius: 10px;
+    transition: width 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /* TABLE */
+  .table-wrap {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    overflow-x: auto;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead th {
+    background: var(--bg2);
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+  }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+
+  td {
+    padding: 12px 16px;
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  td.dim { color: var(--text-dim); }
+  td.mono { font-variant-numeric: tabular-nums; }
+  td.accent { color: var(--accent); font-weight: 600; }
+  td.strong { font-weight: 600; }
+
+  /* BADGES */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .badge-green { background: var(--green-bg); color: var(--green); border: 1px solid rgba(58,125,92,0.15); }
+  .badge-red { background: var(--red-bg); color: var(--red); border: 1px solid rgba(192,57,43,0.15); }
+  .badge-orange { background: var(--orange-bg); color: var(--orange); border: 1px solid rgba(192,104,32,0.15); }
+  .badge-blue { background: var(--blue-bg); color: var(--blue); border: 1px solid rgba(44,110,160,0.15); }
+  .badge-accent { background: var(--accent-bg); color: var(--accent); border: 1px solid rgba(181,98,42,0.15); }
+
+  /* ALERTS */
+  .alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    margin-bottom: 10px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+  .alert-icon { font-size: 15px; flex-shrink: 0; margin-top: 1px; }
+  .alert-warn { background: var(--orange-bg); border: 1px solid rgba(192,104,32,0.2); color: var(--orange); }
+  .alert-danger { background: var(--red-bg); border: 1px solid rgba(192,57,43,0.2); color: var(--red); }
+  .alert-success { background: var(--green-bg); border: 1px solid rgba(58,125,92,0.2); color: var(--green); }
+  .alert-info { background: var(--blue-bg); border: 1px solid rgba(44,110,160,0.2); color: var(--blue); }
+
+  /* RESULT SECTION */
+  .result-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 16px;
+  }
+
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+
+  .result-row:last-child { border-bottom: none; }
+  .result-row .r-label { color: var(--text-dim); }
+  .result-row .r-value { font-weight: 600; color: var(--text); }
+  .result-row.total {
+    background: var(--accent-bg);
+    border-top: 2px solid var(--accent);
+    padding: 14px 20px;
+  }
+  .result-row.total .r-label { font-weight: 700; color: var(--text); font-size: 14px; }
+  .result-row.total .r-value { color: var(--accent); font-size: 20px; font-family: var(--serif); }
+
+  /* SPEC TABLE */
+  .spec-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  .spec-table thead th {
+    background: var(--surface2);
+    padding: 8px 12px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 1px solid var(--border);
+    font-weight: 700;
+  }
+  .spec-table tbody td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    font-size: 12px;
+  }
+  .spec-table tbody tr:last-child td { border-bottom: none; }
+  .spec-table tbody tr:nth-child(even) { background: var(--surface2); }
+  .spec-table .accent { color: var(--accent); font-weight: 600; }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 20px 0; }
+
+  /* SECTION LABEL */
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+    margin-top: 22px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* RULES BOX */
+  .rules-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .rule-item {}
+  .rule-name { font-size: 12px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+  .rule-desc { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
+
+  /* NARUDZBE */
+  .order-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+    transition: box-shadow 0.2s, transform 0.2s;
+    box-shadow: var(--shadow-sm);
+  }
+  .order-card:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+  }
+
+  .order-id {
+    font-family: var(--serif);
+    font-size: 16px;
+    color: var(--accent);
+    min-width: 90px;
+    font-style: italic;
+  }
+
+  .order-info { flex: 1; min-width: 160px; }
+  .order-client { font-size: 14px; font-weight: 600; color: var(--text); }
+  .order-desc { font-size: 12px; color: var(--text-dim); margin-top: 2px; }
+
+  .order-steps {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .step {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    border: 2px solid var(--border);
+    color: var(--text-muted);
+    background: var(--surface2);
+    transition: all 0.3s;
+  }
+
+  .step.done { background: var(--green); border-color: var(--green); color: #fff; }
+  .step.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    box-shadow: 0 0 0 4px rgba(181,98,42,0.15);
+  }
+
+  .step-connector {
+    width: 16px; height: 2px;
+    background: var(--border);
+    flex-shrink: 0;
+    transition: background 0.3s;
+  }
+  .step-connector.done { background: var(--green); }
+
+  .order-deadline { font-size: 12px; color: var(--text-dim); min-width: 90px; text-align: right; }
+  .deadline-warn { color: var(--orange) !important; font-weight: 600; }
+  .deadline-danger { color: var(--red) !important; font-weight: 600; }
+
+  .order-value {
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--accent);
+    min-width: 110px;
+    text-align: right;
+  }
+
+  /* CENOVNIK INPUTS */
+  .price-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .price-row:last-child { border-bottom: none; }
+  .price-name { flex: 1; font-size: 13px; font-weight: 500; color: var(--text); }
+  .price-input-wrap { display: flex; align-items: center; gap: 8px; }
+  .price-input-wrap input { width: 100px; text-align: right; }
+  .price-unit { font-size: 11px; color: var(--text-muted); font-weight: 500; width: 55px; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(30,26,22,0.45);
+    backdrop-filter: blur(4px);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    max-width: 480px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    animation: slideUp 0.25s ease;
+  }
+
+  .modal-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .modal-body { font-size: 13px; color: var(--text-dim); margin-bottom: 22px; line-height: 1.6; }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 22px; }
+
+  /* EMPTY STATE */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-muted);
+  }
+  .empty-icon { font-size: 40px; margin-bottom: 14px; opacity: 0.35; }
+  .empty-text { font-size: 13px; line-height: 1.7; }
+
+  /* FLEX UTILITIES */
+  .flex-end { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+  .flex-between { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .flex-gap { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  /* PWA safe area — iPhone notch & home bar */
+  header {
+    padding-top: max(0px, env(safe-area-inset-top));
+    padding-left: max(32px, calc(env(safe-area-inset-left) + 16px));
+    padding-right: max(32px, calc(env(safe-area-inset-right) + 16px));
+  }
+  main {
+    padding-bottom: max(32px, calc(env(safe-area-inset-bottom) + 16px));
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg2); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+  /* CHIP */
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 10px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-dim);
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+  .info-cell {
+    background: var(--surface);
+    padding: 12px 14px;
+  }
+  .info-cell-label { font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px; }
+  .info-cell-value { font-size: 13px; color: var(--text); font-weight: 500; }
+
+  /* NABAVKA LIST */
+  .mat-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 20px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+  .mat-item:last-child { border-bottom: none; }
+  .mat-item:hover { background: var(--surface2); }
+
+  .mat-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .mat-icon.ploca  { background: #fef3e2; }
+  .mat-icon.kant   { background: #e8f4fd; }
+  .mat-icon.okov   { background: #f0f7ee; }
+  .mat-icon.lesonit { background: #fdf5e8; }
+
+  .mat-info { flex: 1; min-width: 0; }
+  .mat-naziv { font-size: 13px; font-weight: 600; color: var(--text); }
+  .mat-opis  { font-size: 11px; color: var(--text-dim); margin-top: 1px; }
+
+  .mat-qty {
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .mat-qty-val {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--text);
+    line-height: 1;
+  }
+  .mat-qty-jed { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+
+  .mat-stock {
+    text-align: right;
+    min-width: 100px;
+    flex-shrink: 0;
+  }
+  .mat-stock-val { font-size: 12px; font-weight: 500; }
+  .mat-stock-val.ok     { color: var(--green); }
+  .mat-stock-val.warn   { color: var(--orange); }
+  .mat-stock-val.deficit { color: var(--red); font-weight: 700; }
+  .mat-stock-lbl { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+
+  .mat-potrebno {
+    text-align: right;
+    min-width: 110px;
+    flex-shrink: 0;
+  }
+  .mat-potrebno-val {
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .mat-potrebno-val.ok { color: var(--green); }
+  .mat-potrebno-val.nabavi { color: var(--red); }
+  .mat-potrebno-lbl { font-size: 10px; color: var(--text-muted); margin-top: 1px; }
+
+  /* ELEMENT CARDS */
+  .element-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  .element-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+  }
+  .element-card-header:hover { background: var(--bg2); }
+  .element-card-title {
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .element-card-badge {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-dim);
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2px 10px;
+  }
+  .element-card-actions { display: flex; gap: 8px; align-items: center; }
+  .element-card-body { padding: 0; }
+  .element-card-body.collapsed { display: none; }
+  .element-num {
+    width: 24px; height: 24px;
+    background: var(--accent);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .element-meta {
+    display: flex;
+    gap: 16px;
+    padding: 10px 18px;
+    background: var(--accent-bg);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-dim);
+    flex-wrap: wrap;
+  }
+  .element-meta strong { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Plakari <em>&</em> Fioke</div>
+  <div class="header-right">
+    <span class="version">v2.0</span>
+    <div class="status-pill">
+      <div class="dot"></div>
+      Sistem aktivan
+    </div>
+  </div>
+</header>
+
+<nav class="nav-tabs">
+  <button class="tab active" onclick="showTab('kalkulator', this)">
+    <span class="tab-icon">⊞</span> Kalkulator
+  </button>
+  <button class="tab" onclick="showTab('magacin', this)">
+    <span class="tab-icon">▤</span> Magacin
+  </button>
+  <button class="tab" onclick="showTab('narudzbe', this)">
+    <span class="tab-icon">◈</span> Narudžbe
+  </button>
+  <button class="tab" onclick="showTab('cenovnik', this)">
+    <span class="tab-icon">⊙</span> Cenovnik
+  </button>
+</nav>
+
+<main>
+
+<!-- ══════════════════════ KALKULATOR ══════════════════════ -->
+<div class="page active" id="page-kalkulator">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Kalkulator</div>
+      <div class="page-subtitle">Više elemenata · fuga 4 mm · debljina ploče 18 mm · lesonit od ivice do ivice</div>
+    </div>
+    <button class="btn btn-secondary btn-sm" onclick="clearSveElemente()">Očisti sve</button>
+  </div>
+
+  <!-- GLOBALNE POSTAVKE -->
+  <div class="card" style="margin-bottom:16px;">
+    <div class="card-title"><span class="card-title-dot"></span> Globalne postavke projekta</div>
+    <div class="form-row" style="margin-bottom:0;">
+      <div class="form-group">
+        <label>Materijal (svi elementi)</label>
+        <select id="g-mat">
+          <option value="univer_beli">Univer Beli 18mm</option>
+          <option value="univer_hrast">Univer Hrast 18mm</option>
+          <option value="univer_antracit">Univer Antracit 18mm</option>
+          <option value="medijapan">Medijapan Farbani 18mm</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Kant traka</label>
+        <select id="g-kant">
+          <option value="abs_1">ABS 1mm</option>
+          <option value="abs_2">ABS 2mm</option>
+        </select>
+      </div>
+      <div class="form-group" style="display:flex;align-items:flex-end;padding-bottom:2px;">
+        <label style="display:flex;align-items:center;gap:8px;text-transform:none;letter-spacing:0;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;">
+          <input type="checkbox" id="g-zadnjica" checked /> Leđa (Lesonit 3mm)
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- LISTA ELEMENATA -->
+  <div id="elementi-lista"></div>
+
+  <!-- DODAJ ELEMENT FORMA -->
+  <div class="card" id="dodaj-element-card">
+    <div class="card-title"><span class="card-title-dot"></span> Dodaj element</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Naziv elementa</label>
+        <input type="text" id="el-naziv" placeholder="npr. Kuhinjski donji 800" />
+      </div>
+      <div class="form-group">
+        <label>Tip</label>
+        <select id="el-tip">
+          <option value="korpus">Korpus / Orman</option>
+          <option value="fioka-donji">Donji s fiokama</option>
+          <option value="gornji">Gornji orman</option>
+          <option value="viseci">Viseći element</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Širina (mm)</label>
+        <input type="number" id="el-sir" placeholder="800" min="100" max="3000" />
+      </div>
+      <div class="form-group">
+        <label>Visina (mm)</label>
+        <input type="number" id="el-vis" placeholder="720" min="100" max="3000" />
+      </div>
+      <div class="form-group">
+        <label>Dubina (mm)</label>
+        <input type="number" id="el-dub" placeholder="560" min="100" max="1000" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Fioke</label>
+        <select id="el-fioke">
+          <option value="0">Bez fioka</option>
+          <option value="1">1 fioka</option>
+          <option value="2">2 fioke</option>
+          <option value="3">3 fioke</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Vrata</label>
+        <select id="el-vrata">
+          <option value="0">Bez vrata</option>
+          <option value="1">1 krilo</option>
+          <option value="2">2 krila</option>
+          <option value="3">3 krila</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Police</label>
+        <select id="el-police">
+          <option value="0">Bez polica</option>
+          <option value="1">1 polica</option>
+          <option value="2">2 police</option>
+          <option value="3">3 police</option>
+        </select>
+      </div>
+    </div>
+    <div class="flex-end" style="margin-top:8px;">
+      <button class="btn btn-primary" onclick="dodajElement()">+ Dodaj element</button>
+    </div>
+  </div>
+
+  <!-- PRAVILA -->
+  <div class="card">
+    <div class="card-title"><span class="card-title-dot"></span> Aktivna pravila sistema</div>
+    <div class="info-grid">
+      <div class="info-cell"><div class="info-cell-label">Fuga frontovi</div><div class="info-cell-value">Š − 2 × 4mm</div></div>
+      <div class="info-cell"><div class="info-cell-label">Konstrukcija korpus</div><div class="info-cell-value">Š/V − 2 × 18mm</div></div>
+      <div class="info-cell"><div class="info-cell-label">Stranica fioke (Š)</div><div class="info-cell-value">Otvor − 26mm</div></div>
+      <div class="info-cell"><div class="info-cell-label">Lesonit leđa</div><div class="info-cell-value">Puna Š × V (ivica do ivice)</div></div>
+    </div>
+  </div>
+
+  <!-- REZULTAT PROJEKTA -->
+  <div id="projekat-rezultat" style="display:none; margin-top:8px;">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px;">
+      <div style="font-family:var(--serif);font-size:22px;">Rezultati projekta</div>
+      <button class="btn btn-secondary btn-sm" onclick="kopirajListu()">Kopiraj listu</button>
+    </div>
+
+    <!-- po elementu -->
+    <div id="elementi-rezultati"></div>
+
+    <!-- zbirna tabla -->
+    <div class="result-section" style="margin-top:8px;">
+      <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);">
+        Zbirna specifikacija svih ploča
+      </div>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>#</th><th>Element</th><th>Naziv ploče</th><th>Š mm</th><th>D/V mm</th><th>Kom</th><th>m²</th><th>Mat.</th></tr></thead>
+          <tbody id="spec-tbody-all"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- rekapitulacija i nabavka -->
+    <div class="grid-2" style="margin-top:16px;">
+      <div>
+        <div class="result-section">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--border);font-size:12px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-dim);">Ukupna kalkulacija</div>
+          <div id="ukupno-content"></div>
+        </div>
+      </div>
+<!-- ══════════════════════ MAGACIN ══════════════════════ -->
+<div class="page" id="page-magacin">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Magacin</div>
+      <div class="page-subtitle">Stanje materijala, okova i kant traka · automatska detekcija deficita</div>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="openMagacinModal()">+ Ažuriraj stanje</button>
+  </div>
+
+  <div id="mag-alerts"></div>
+
+  <div class="section-label">Pločasti materijali</div>
+  <div class="grid-4" id="mag-stats"></div>
+
+  <div class="section-label">Kant traka & Okov</div>
+  <div class="grid-4" id="mag-stats2"></div>
+
+  <div class="section-label">Kompletna evidencija</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Artikal</th>
+          <th>Količina</th>
+          <th>Jed.</th>
+          <th>Min. zaliha</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="mag-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════ NARUDZBE ══════════════════════ -->
+<div class="page" id="page-narudzbe">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Narudžbe</div>
+      <div class="page-subtitle">Praćenje statusa i rokova isporuke</div>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="openNarudzbinModal()">+ Nova narudžba</button>
+  </div>
+
+  <div class="grid-4" style="margin-bottom:28px;">
+    <div class="stat-card ok">
+      <div class="stat-card-stripe"></div>
+      <div class="stat-label">Ukupno aktivnih</div>
+      <div class="stat-value ok" id="n-total">3</div>
+      <div class="stat-unit">narudžbi</div>
+    </div>
+    <div class="stat-card warn">
+      <div class="stat-card-stripe"></div>
+      <div class="stat-label">U pripremi</div>
+      <div class="stat-value warn" id="n-priprema">1</div>
+      <div class="stat-unit">čeka start</div>
+    </div>
+    <div class="stat-card ok">
+      <div class="stat-card-stripe"></div>
+      <div class="stat-label">Sklapanje</div>
+      <div class="stat-value ok" id="n-sklapanje">1</div>
+      <div class="stat-unit">u toku</div>
+    </div>
+    <div class="stat-card danger">
+      <div class="stat-card-stripe"></div>
+      <div class="stat-label">Kasni</div>
+      <div class="stat-value danger" id="n-kasni">1</div>
+      <div class="stat-unit">prekoračeno</div>
+    </div>
+  </div>
+
+  <div id="narudzbe-list"></div>
+</div>
+
+<!-- ══════════════════════ CENOVNIK ══════════════════════ -->
+<div class="page" id="page-cenovnik">
+  <div class="page-header">
+    <div>
+      <div class="page-title">Cenovnik & Nabavka</div>
+      <div class="page-subtitle">Baza cena materijala, okova i usluga · direktno utiče na sve kalkulacije</div>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="sacuvajCene()">Sačuvaj cene</button>
+  </div>
+
+  <div id="cene-alert" style="display:none;" class="alert alert-success">
+    <span class="alert-icon">✓</span> Cenovnik uspešno sačuvan — sve kalkulacije sada koriste ažurirane cene.
+  </div>
+
+  <div class="grid-2">
+    <div>
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span> Pločasti materijali</div>
+        <div style="font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:var(--text-muted); margin-bottom:10px;">Univer 18mm</div>
+        <div id="univer-cene"></div>
+        <div style="font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:var(--text-muted); margin:16px 0 10px;">Medijapan</div>
+        <div class="price-row">
+          <span class="price-name">Medijapan sirovi</span>
+          <div class="price-input-wrap">
+            <input type="number" id="c-medijapan-sirovi" value="1100" />
+            <span class="price-unit">RSD/m²</span>
+          </div>
+        </div>
+        <div class="price-row">
+          <span class="price-name">Medijapan farbanje/lakiranje</span>
+          <div class="price-input-wrap">
+            <input type="number" id="c-medijapan-farb" value="1400" />
+            <span class="price-unit">RSD/m²</span>
+          </div>
+        </div>
+        <div style="font-size:11px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:var(--text-muted); margin:16px 0 10px;">Lesonit / HDF</div>
+        <div class="price-row">
+          <span class="price-name">Lesonit 3mm</span>
+          <div class="price-input-wrap">
+            <input type="number" id="c-lesonit" value="350" />
+            <span class="price-unit">RSD/m²</span>
+          </div>
+        </div>
+        <div class="price-row">
+          <span class="price-name">HDF 5mm</span>
+          <div class="price-input-wrap">
+            <input type="number" id="c-hdf" value="480" />
+            <span class="price-unit">RSD/m²</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span> Kant traka</div>
+        <div class="price-row">
+          <span class="price-name">ABS 1mm</span>
+          <div class="price-input-wrap">
+            <input type="number" id="c-abs1" value="25" />
+            <span class="price-unit">RSD/m</span>
+          </div>
+        </div>
+        <div class="price-row">
+          <span class="price-name">ABS 2mm</span>
+          <div class="price-input-wrap">
+            <input type="number" id="c-abs2" value="35" />
+            <span class="price-unit">RSD/m</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span> Okov</div>
+        <div class="price-row">
+          <span class="price-name">Šarke clip-on</span>
+          <div class="price-input-wrap">
+            <input type="number" id="c-sarke" value="180" />
+            <span class="price-unit">RSD/kom</span>
+          </div>
+        </div>
+        <div class="price-row">
+          <span class="price-name">Ladičar Blum 450mm</span>
+          <div class="price-input-wrap">
+            <input type="number" id="c-ladicar" value="2200" />
+            <span class="price-unit">RSD/par</span>
+          </div>
+        </div>
+        <div class="price-row">
+          <span class="price-name">Vodilica za vrata</span>
+          <div class="price-input-wrap">
+            <input type="number" id="c-vodilica" value="850" />
+            <span class="price-unit">RSD/kom</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span> Usluge & Rad</div>
+        <div class="price-row">
+          <span class="price-name">Usluga sečenja</span>
+          <div class="price-input-wrap">
+            <input type="number" id="c-secenje" value="25" />
+            <span class="price-unit">RSD/m reza</span>
+          </div>
+        </div>
+        <div class="price-row">
+          <span class="price-name">Bušenje rupa za šarke</span>
+          <div class="price-input-wrap">
+            <input type="number" id="c-busenje" value="50" />
+            <span class="price-unit">RSD/kom</span>
+          </div>
+        </div>
+        <div class="price-row">
+          <span class="price-name">Ruke majstora</span>
+          <div class="price-input-wrap">
+            <input type="number" id="c-majstor" value="20" />
+            <span class="price-unit">%</span>
+          </div>
+        </div>
+
+        <div style="background:var(--accent-bg); border:1px solid rgba(181,98,42,0.15); border-radius:var(--radius-sm); padding:12px 14px; margin-top:14px; font-size:12px; color:var(--text-dim); line-height:1.7;">
+          <strong style="color:var(--accent);">Formula ukupne cene:</strong><br>
+          (Materijal + Okov + Usluge) × (1 + % majstora)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</main>
+
+<!-- MAGACIN MODAL -->
+<div class="modal-overlay" id="mag-modal">
+  <div class="modal">
+    <div class="modal-title">Ažuriraj magacin</div>
+    <div class="modal-body">Unesite trenutne količine na stanju. Ostavite prazno za stavke koje se ne menjaju.</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Univer beli (table)</label>
+        <input type="number" id="m-univer-beli" placeholder="npr. 5" />
+      </div>
+      <div class="form-group">
+        <label>Univer hrast (table)</label>
+        <input type="number" id="m-univer-hrast" placeholder="npr. 0" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Lesonit 3mm (m²)</label>
+        <input type="number" id="m-lesonit" step="0.1" placeholder="npr. 5.0" />
+      </div>
+      <div class="form-group">
+        <label>ABS 2mm (m)</label>
+        <input type="number" id="m-abs2" step="0.1" placeholder="npr. 10" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Šarke clip-on (kom)</label>
+        <input type="number" id="m-sarke" placeholder="npr. 20" />
+      </div>
+      <div class="form-group">
+        <label>Ladičar Blum (par)</label>
+        <input type="number" id="m-ladicar" placeholder="npr. 4" />
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeMagacinModal()">Otkaži</button>
+      <button class="btn btn-primary" onclick="saveMagacin()">Sačuvaj stanje</button>
+    </div>
+  </div>
+</div>
+
+<!-- NARUDŽBA MODAL -->
+<div class="modal-overlay" id="narudzba-modal">
+  <div class="modal">
+    <div class="modal-title">Nova narudžba</div>
+    <div class="modal-body">Popunite podatke o narudžbi klijenta.</div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Klijent</label>
+        <input type="text" id="n-klijent" placeholder="Ime i prezime" />
+      </div>
+      <div class="form-group">
+        <label>Opis</label>
+        <input type="text" id="n-opis" placeholder="npr. Kuhinjski 800×2100" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Status</label>
+        <select id="n-status">
+          <option value="priprema">U pripremi</option>
+          <option value="secenje">Sečenje</option>
+          <option value="sklapanje">Sklapanje</option>
+          <option value="montaza">Montaža</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Rok isporuke</label>
+        <input type="date" id="n-rok" />
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Vrednost (RSD)</label>
+        <input type="number" id="n-vrednost" placeholder="npr. 15000" />
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeNarudzbinModal()">Otkaži</button>
+      <button class="btn btn-primary" onclick="saveNarudzba()">Dodaj narudžbu</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════ STATE ══════════════════════
+const state = {
+  cenovnik: {
+    univer_beli: 850, univer_hrast: 950, univer_antracit: 980,
+    medijapan_sirovi: 1100, medijapan_farb: 1400,
+    lesonit: 350, hdf: 480,
+    abs1: 25, abs2: 35,
+    sarke: 180, ladicar: 2200, vodilica: 850,
+    secenje: 25, busenje: 50, majstor: 20
+  },
+  magacin: [
+    { id:'M01', naziv:'Univer beli 18mm',     kolicina:28.825, jed:'m²',  min:10, kat:'ploca' },
+    { id:'M02', naziv:'Univer hrast 18mm',    kolicina:0,      jed:'m²',  min:10, kat:'ploca' },
+    { id:'M03', naziv:'Medijapan farbani',    kolicina:0,      jed:'m²',  min:5,  kat:'ploca' },
+    { id:'M04', naziv:'Lesonit 3mm',          kolicina:0,      jed:'m²',  min:5,  kat:'ploca' },
+    { id:'K01', naziv:'ABS kant 2mm',         kolicina:100,    jed:'dm',  min:50, kat:'kant'  },
+    { id:'K02', naziv:'ABS kant 1mm',         kolicina:0,      jed:'dm',  min:50, kat:'kant'  },
+    { id:'O01', naziv:'Šarke clip-on',        kolicina:20,     jed:'kom', min:20, kat:'okov'  },
+    { id:'O02', naziv:'Ladičar Blum 450mm',   kolicina:0,      jed:'par', min:4,  kat:'okov'  },
+    { id:'O03', naziv:'Vodilica za vrata',    kolicina:0,      jed:'kom', min:4,  kat:'okov'  },
+  ],
+  narudzbe: [
+    { id:'NAR-001', klijent:'Petar Jović',   opis:'Kuhinjski donji 800 × 2 fioke',  status:'sklapanje', rok:'2026-05-08', vrednost:10364 },
+    { id:'NAR-002', klijent:'Ana Nikolić',   opis:'Garderobni orman 600×2100',       status:'secenje',   rok:'2026-05-12', vrednost:18500 },
+    { id:'NAR-003', klijent:'Marko Đorđić', opis:'Kupatilski element 800×2200',     status:'priprema',  rok:'2026-04-28', vrednost:22000 },
+  ]
+};
+
+// ══════════════════════ TABS ══════════════════════
+function showTab(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  el.classList.add('active');
+  if (name === 'magacin') renderMagacin();
+  if (name === 'narudzbe') renderNarudzbe();
+  if (name === 'cenovnik') renderCenovnik();
+}
+
+// ══════════════════════ KALKULATOR ══════════════════════
+let elementi = []; // lista dodatih elemenata
+
+function izracunajElement(el) {
+  const { sir, vis, dub, fioke, vrata, police, zaZadnjicu } = el;
+  const d = 18, fuga = 4;
+  const unSir = sir - 2 * d;
+
+  const ploce = [];
+  ploce.push({ naziv:'Bočna leva',  sir:dub, visina:vis, kom:1, mat:'ploca' });
+  ploce.push({ naziv:'Bočna desna', sir:dub, visina:vis, kom:1, mat:'ploca' });
+  ploce.push({ naziv:'Dno korpusa', sir:unSir, visina:dub, kom:1, mat:'ploca' });
+
+  if (fioke > 0) {
+    ploce.push({ naziv:'Prednja šifonjerka', sir:unSir, visina:100, kom:1, mat:'ploca' });
+  } else {
+    ploce.push({ naziv:'Gornja ploča', sir:unSir, visina:dub, kom:1, mat:'ploca' });
+  }
+
+  for (let i = 0; i < police; i++) {
+    ploce.push({ naziv:`Polica ${i+1}`, sir:unSir, visina:dub-d-10, kom:1, mat:'ploca' });
+  }
+
+  // Lesonit: puna Š × V od ivice do ivice
+  if (zaZadnjicu) {
+    ploce.push({ naziv:'Leđa (Lesonit)', sir:sir, visina:vis, kom:1, mat:'lesonit' });
+  }
+
+  if (vrata > 0) {
+    const vSir = Math.floor(sir/vrata) - fuga*2;
+    const vVis = vis - fuga*2;
+    ploce.push({ naziv:`Front vrata (${vrata} kom)`, sir:vSir, visina:vVis, kom:vrata, mat:'ploca' });
+  }
+
+  if (fioke > 0) {
+    const fiokaVis = Math.floor((vis-100)/fioke);
+    ploce.push({ naziv:`Front fioke (${fioke} kom)`,      sir:sir-fuga*2,   visina:fiokaVis-fuga*2, kom:fioke,   mat:'ploca'   });
+    ploce.push({ naziv:`Dno fioke (${fioke} kom)`,        sir:unSir-26,     visina:dub-10,          kom:fioke,   mat:'lesonit' });
+    ploce.push({ naziv:`Stranica fioke (${fioke*2} kom)`, sir:dub-10,       visina:120,             kom:fioke*2, mat:'ploca'   });
+    ploce.push({ naziv:`Čelo fioke (${fioke} kom)`,       sir:unSir-26,     visina:120,             kom:fioke,   mat:'ploca'   });
+  }
+
+  let m2P = 0, m2L = 0;
+  const proc = ploce.map((p,i) => {
+    const m2 = (p.sir/1000)*(p.visina/1000)*p.kom;
+    if (p.mat==='lesonit') m2L += m2; else m2P += m2;
+    return { ...p, m2, idx:i+1 };
+  });
+
+  // Kantovanje (u mm → konvertuj u m na kraju)
+  let kantMm = 0;
+  kantMm += vis*2*2;   // bočne: 2 ivice × 2 ploče
+  kantMm += unSir*2;   // dno + gornja: prednja ivica
+  if (vrata > 0) {
+    const vS = Math.floor(sir/vrata)-fuga*2, vV=vis-fuga*2;
+    kantMm += (vS*2+vV*2)*vrata;
+  }
+  if (fioke > 0) {
+    const fS=sir-fuga*2, fV=Math.floor((vis-100)/fioke)-fuga*2;
+    kantMm += (fS*2+fV*2)*fioke;
+    kantMm += (unSir-26)*2*fioke;
+  }
+  for (let i=0;i<police;i++) kantMm += unSir;
+
+  return { ploce: proc, m2P, m2L, kantM: kantMm/1000 };
+}
+
+function dodajElement() {
+  const sir = +document.getElementById('el-sir').value;
+  const vis = +document.getElementById('el-vis').value;
+  const dub = +document.getElementById('el-dub').value;
+
+  if (!sir || !vis || !dub) {
+    alert('Unesite širinu, visinu i dubinu elementa.');
+    return;
+  }
+
+  const naziv = document.getElementById('el-naziv').value.trim() ||
+    `${document.getElementById('el-tip').options[document.getElementById('el-tip').selectedIndex].text} ${sir}×${vis}×${dub}`;
+
+  const el = {
+    id: Date.now(),
+    naziv,
+    tip: document.getElementById('el-tip').value,
+    sir, vis, dub,
+    fioke: +document.getElementById('el-fioke').value,
+    vrata: +document.getElementById('el-vrata').value,
+    police: +document.getElementById('el-police').value,
+    zaZadnjicu: document.getElementById('g-zadnjica').checked,
+  };
+
+  elementi.push(el);
+
+  // Resetuj formu
+  document.getElementById('el-naziv').value = '';
+  document.getElementById('el-sir').value = '';
+  document.getElementById('el-vis').value = '';
+  document.getElementById('el-dub').value = '';
+  document.getElementById('el-fioke').value = '0';
+  document.getElementById('el-vrata').value = '0';
+  document.getElementById('el-police').value = '0';
+
+  renderKalkulator();
+}
+
+function ukloniElement(id) {
+  elementi = elementi.filter(e => e.id !== id);
+  renderKalkulator();
+}
+
+function toggleElement(id) {
+  const body = document.getElementById('el-body-' + id);
+  if (body) body.classList.toggle('collapsed');
+}
+
+function renderKalkulator() {
+  const mat   = document.getElementById('g-mat').value;
+  const kant  = document.getElementById('g-kant').value;
+  const cP    = getCenaPloca(mat);
+  const cL    = state.cenovnik.lesonit;
+  const cK    = kant==='abs_2' ? state.cenovnik.abs2 : state.cenovnik.abs1 || 25;
+
+  const matLabel = {
+    univer_beli:'Univer Beli 18mm', univer_hrast:'Univer Hrast 18mm',
+    univer_antracit:'Univer Antracit 18mm', medijapan:'Medijapan Farbani 18mm'
+  }[mat];
+  const kantLabel = kant==='abs_2' ? 'ABS 2mm' : 'ABS 1mm';
+
+  // Render lista elemenata (kartice)
+  document.getElementById('elementi-lista').innerHTML = elementi.length === 0
+    ? ''
+    : elementi.map((el, idx) => {
+        const res = izracunajElement(el);
+        const iznP  = Math.round(res.m2P * cP);
+        const iznL  = Math.round(res.m2L * cL);
+        const iznK  = Math.round(res.kantM * cK);
+        const okov  = el.fioke*state.cenovnik.ladicar + el.vrata*2*state.cenovnik.sarke;
+        const baza  = iznP+iznL+iznK+okov;
+        const ukEl  = baza + Math.round(baza*state.cenovnik.majstor/100);
+
+        const specRows = res.ploce.map(p => `
+          <tr>
+            <td class="dim">${p.idx}</td>
+            <td class="strong">${p.naziv}</td>
+            <td class="mono">${p.sir}</td>
+            <td class="mono">${p.visina}</td>
+            <td class="accent">${p.kom}</td>
+            <td class="mono">${(p.m2).toFixed(3)}</td>
+            <td><span class="tag">${p.mat==='lesonit'?'Lesonit':'Univer'}</span></td>
+          </tr>`).join('');
+
+        return `
+        <div class="element-card" id="el-card-${el.id}">
+          <div class="element-card-header" onclick="toggleElement(${el.id})">
+            <div class="element-card-title">
+              <div class="element-num">${idx+1}</div>
+              ${el.naziv}
+              <span class="element-card-badge">${el.sir}×${el.vis}×${el.dub} mm</span>
+            </div>
+            <div class="element-card-actions">
+              <span style="font-family:var(--serif);font-size:15px;color:var(--accent);">${ukEl.toLocaleString()} RSD</span>
+              <button class="btn btn-danger btn-sm" onclick="event.stopPropagation();ukloniElement(${el.id})">✕</button>
+            </div>
+          </div>
+          <div class="element-card-body" id="el-body-${el.id}">
+            <div class="element-meta">
+              <span>Univer: <strong>${res.m2P.toFixed(3)} m²</strong></span>
+              ${res.m2L>0?`<span>Lesonit: <strong>${res.m2L.toFixed(3)} m²</strong></span>`:''}
+              <span>Kant: <strong>${res.kantM.toFixed(2)} m</strong></span>
+              ${el.fioke>0?`<span>Ladičari: <strong>${el.fioke} par</strong></span>`:''}
+              ${el.vrata>0?`<span>Šarke: <strong>${el.vrata*2} kom</strong></span>`:''}
+            </div>
+            <div style="overflow-x:auto;">
+              <table>
+                <thead><tr><th>#</th><th>Naziv ploče</th><th>Š mm</th><th>D/V mm</th><th>Kom</th><th>m²</th><th>Mat.</th></tr></thead>
+                <tbody>${specRows}</tbody>
+              </table>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+
+  if (elementi.length === 0) {
+    document.getElementById('projekat-rezultat').style.display = 'none';
+    return;
+  }
+
+  document.getElementById('projekat-rezultat').style.display = 'block';
+
+  // Zbirna tabela svih ploča
+  let allRows = '', rowNum = 0;
+  let totM2P = 0, totM2L = 0, totKantM = 0, totLadic = 0, totSarke = 0;
+  const rezultati = elementi.map(el => {
+    const res = izracunajElement(el);
+    totM2P  += res.m2P;
+    totM2L  += res.m2L;
+    totKantM+= res.kantM;
+    totLadic+= el.fioke;
+    totSarke+= el.vrata*2;
+    res.ploce.forEach(p => {
+      rowNum++;
+      allRows += `<tr>
+        <td class="dim">${rowNum}</td>
+        <td class="dim">${el.naziv}</td>
+        <td class="strong">${p.naziv}</td>
+        <td class="mono">${p.sir}</td>
+        <td class="mono">${p.visina}</td>
+        <td class="accent">${p.kom}</td>
+        <td class="mono">${p.m2.toFixed(3)}</td>
+        <td><span class="tag">${p.mat==='lesonit'?'Lesonit':'Univer'}</span></td>
+      </tr>`;
+    });
+    return res;
+  });
+
+  document.getElementById('spec-tbody-all').innerHTML = allRows;
+
+  // Ukupna kalkulacija
+  const iznP  = Math.round(totM2P * cP);
+  const iznL  = Math.round(totM2L * cL);
+  const iznK  = Math.round(totKantM * cK);
+  const iznO  = totLadic*state.cenovnik.ladicar + totSarke*state.cenovnik.sarke;
+  const baza  = iznP+iznL+iznK+iznO;
+  const iznMaj= Math.round(baza*state.cenovnik.majstor/100);
+  const ukupno= baza+iznMaj;
+
+  document.getElementById('ukupno-content').innerHTML = `
+    <div class="result-row"><span class="r-label">${matLabel} (${totM2P.toFixed(3)} m²)</span><span class="r-value">${iznP.toLocaleString()} RSD</span></div>
+    ${totM2L>0?`<div class="result-row"><span class="r-label">Lesonit 3mm (${totM2L.toFixed(3)} m²)</span><span class="r-value">${iznL.toLocaleString()} RSD</span></div>`:''}
+    <div class="result-row"><span class="r-label">${kantLabel} (${totKantM.toFixed(2)} m)</span><span class="r-value">${iznK.toLocaleString()} RSD</span></div>
+    ${totLadic>0?`<div class="result-row"><span class="r-label">Ladičari Blum (${totLadic} par)</span><span class="r-value">${(totLadic*state.cenovnik.ladicar).toLocaleString()} RSD</span></div>`:''}
+    ${totSarke>0?`<div class="result-row"><span class="r-label">Šarke clip-on (${totSarke} kom)</span><span class="r-value">${(totSarke*state.cenovnik.sarke).toLocaleString()} RSD</span></div>`:''}
+    <div class="result-row"><span class="r-label">Rad majstora (${state.cenovnik.majstor}%)</span><span class="r-value">${iznMaj.toLocaleString()} RSD</span></div>
+    <div class="result-row total"><span class="r-label">UKUPNO (${elementi.length} ${elementi.length===1?'element':'elemenata'})</span><span class="r-value">${ukupno.toLocaleString()} RSD</span></div>
+  `;
+
+  // Lista potrebnog materijala
+  const magMatId = {univer_beli:'M01',univer_hrast:'M02',univer_antracit:'M02',medijapan:'M03'}[mat]||'M01';
+  const magMat   = state.magacin.find(m=>m.id===magMatId);
+  const magLeson = state.magacin.find(m=>m.id==='M04');
+  const magKant  = state.magacin.find(m=>m.id==='K01');
+  const magLadic = state.magacin.find(m=>m.id==='O02');
+  const magSarke = state.magacin.find(m=>m.id==='O01');
+
+  function napraviStavku(naziv, kat, icon, potrebno, jed, magItem, dec=2) {
+    const naStanju = magItem ? magItem.kolicina : 0;
+    const treba    = Math.max(0, potrebno - naStanju);
+    const status   = treba<=0 ? 'ok' : naStanju>0 ? 'warn' : 'deficit';
+    return { naziv, kat, icon, potrebno, jed, naStanju, treba, status, dec };
+  }
+
+  const nabItems = [];
+  nabItems.push(napraviStavku(matLabel, 'ploca', '🪵', totM2P, 'm²', magMat));
+  if (totM2L>0) nabItems.push(napraviStavku('Lesonit 3mm', 'lesonit', '📋', totM2L, 'm²', magLeson));
+  nabItems.push(napraviStavku(kantLabel, 'kant', '📏', totKantM*10, 'dm', magKant)); // dm
+  if (totLadic>0) nabItems.push(napraviStavku('Ladičar Blum 450mm', 'okov', '🔩', totLadic, 'par', magLadic, 0));
+  if (totSarke>0) nabItems.push(napraviStavku('Šarke clip-on', 'okov', '🔧', totSarke, 'kom', magSarke, 0));
+
+  window._lastNabavka = nabItems;
+  const imaDeficita = nabItems.some(i=>i.treba>0);
+  document.getElementById('nabavka-status-badge').innerHTML = imaDeficita
+    ? `<span class="badge badge-red">⚠ Nedostaje materijal</span>`
+    : `<span class="badge badge-green">✓ Sve na stanju</span>`;
+
+  document.getElementById('nabavka-content').innerHTML = nabItems.map(it => {
+    const sCls = it.status==='ok'?'ok':it.status==='warn'?'warn':'deficit';
+    const sTxt = it.status==='ok'
+      ? `✓ Dovoljno (${it.naStanju.toFixed(it.dec)} ${it.jed})`
+      : `${it.naStanju.toFixed(it.dec)} ${it.jed} na stanju`;
+    const tTxt = it.treba>0
+      ? `<div class="mat-potrebno-val nabavi">Nabavi: ${it.treba.toFixed(it.dec)} ${it.jed}</div><div class="mat-potrebno-lbl">nije pokriveno</div>`
+      : `<div class="mat-potrebno-val ok">Pokriveno ✓</div><div class="mat-potrebno-lbl">magacin dovoljan</div>`;
+    return `<div class="mat-item">
+      <div class="mat-icon ${it.kat}">${it.icon}</div>
+      <div class="mat-info">
+        <div class="mat-naziv">${it.naziv}</div>
+        <div class="mat-opis">Potrebno: ${it.potrebno.toFixed(it.dec)} ${it.jed}</div>
+      </div>
+      <div class="mat-stock">
+        <div class="mat-stock-val ${sCls}">${sTxt}</div>
+        <div class="mat-stock-lbl">stanje magacina</div>
+      </div>
+      <div class="mat-potrebno">${tTxt}</div>
+    </div>`;
+  }).join('');
+}
+
+function clearSveElemente() {
+  if (elementi.length > 0 && !confirm('Obrisati sve elemente?')) return;
+  elementi = [];
+  renderKalkulator();
+  document.getElementById('projekat-rezultat').style.display = 'none';
+  document.getElementById('elementi-lista').innerHTML = '';
+}
+
+function kopirajListu() {
+  if (!window._lastNabavka) return;
+  const lines = ['LISTA POTREBNOG MATERIJALA', '─'.repeat(40)];
+  window._lastNabavka.forEach(it => {
+    const s = it.treba>0 ? `⚠ NABAVI: ${it.treba.toFixed(it.dec)} ${it.jed}` : '✓ Pokriveno';
+    lines.push(`${it.naziv}\n  Potrebno: ${it.potrebno.toFixed(it.dec)} ${it.jed}  |  Na stanju: ${it.naStanju.toFixed(it.dec)} ${it.jed}  |  ${s}`);
+  });
+  lines.push('─'.repeat(40));
+  navigator.clipboard.writeText(lines.join('\n')).then(() => {
+    const btn = event.target;
+    btn.textContent = '✓ Kopirano!';
+    setTimeout(()=>btn.textContent='Kopiraj listu', 2000);
+  });
+}
+
+function getCenaPloca(mat) {
+  return {
+    univer_beli: state.cenovnik.univer_beli,
+    univer_hrast: state.cenovnik.univer_hrast,
+    univer_antracit: state.cenovnik.univer_antracit,
+    medijapan: state.cenovnik.medijapan_farb
+  }[mat] || state.cenovnik.univer_beli;
+}
+
+function clearForm() {
+  document.getElementById('result-placeholder').style.display = 'block';
+  document.getElementById('result-output').style.display = 'none';
+}
+
+// ══════════════════════ MAGACIN ══════════════════════
+function renderMagacin() {
+  const deficiti = state.magacin.filter(m => m.kolicina < m.min);
+  document.getElementById('mag-alerts').innerHTML = deficiti.map(d => `
+    <div class="alert ${d.kolicina<=0?'alert-danger':'alert-warn'}">
+      <span class="alert-icon">${d.kolicina<=0?'⚠':'↓'}</span>
+      <span><strong>${d.kolicina<=0?'DEFICIT':'Niska zaliha'}</strong> — ${d.naziv}: nedostaje <strong>${(d.min-d.kolicina).toFixed(1)} ${d.jed}</strong></span>
+    </div>`).join('');
+
+  const renderCards = (items, containerId) => {
+    document.getElementById(containerId).innerHTML = items.map(m => {
+      const pct = Math.min(100, (m.kolicina/(m.min*3))*100);
+      const cls = m.kolicina<=0?'danger':m.kolicina<m.min?'warn':'ok';
+      const color = cls==='ok'?'var(--green)':cls==='warn'?'var(--orange)':'var(--red)';
+      return `<div class="stat-card ${cls}">
+        <div class="stat-card-stripe"></div>
+        <div class="stat-label">${m.id}</div>
+        <div class="stat-value ${cls}">${typeof m.kolicina==='number'?m.kolicina.toFixed(1):m.kolicina}</div>
+        <div class="stat-unit">${m.jed} · min ${m.min}</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${color}"></div></div>
+        <div style="font-size:10px;color:var(--text-muted);margin-top:8px;font-weight:500;">${m.naziv.split(' ').slice(0,2).join(' ')}</div>
+      </div>`;
+    }).join('');
+  };
+
+  renderCards(state.magacin.filter(m=>m.kat==='ploca'), 'mag-stats');
+  renderCards(state.magacin.filter(m=>m.kat!=='ploca'), 'mag-stats2');
+
+  document.getElementById('mag-tbody').innerHTML = state.magacin.map(m => {
+    const cls = m.kolicina<=0?'badge-red':m.kolicina<m.min?'badge-orange':'badge-green';
+    const lbl = m.kolicina<=0?'⚠ Deficit':m.kolicina<m.min?'↓ Nisko':'✓ OK';
+    return `<tr>
+      <td class="dim">${m.id}</td>
+      <td class="strong">${m.naziv}</td>
+      <td class="mono ${m.kolicina<=0?'':''}"><span style="${m.kolicina<=0?'color:var(--red);font-weight:600':''}">${typeof m.kolicina==='number'?m.kolicina.toFixed(2):m.kolicina}</span></td>
+      <td class="dim">${m.jed}</td>
+      <td class="dim">${m.min} ${m.jed}</td>
+      <td><span class="badge ${cls}">${lbl}</span></td>
+      <td><button class="btn btn-ghost btn-sm" onclick="editMag('${m.id}')">Uredi</button></td>
+    </tr>`;
+  }).join('');
+}
+
+function openMagacinModal() { document.getElementById('mag-modal').classList.add('open'); }
+function closeMagacinModal() { document.getElementById('mag-modal').classList.remove('open'); }
+function saveMagacin() {
+  const map = {
+    'm-univer-beli': {id:'M01', mult:5.765},
+    'm-univer-hrast': {id:'M02', mult:5.765},
+    'm-lesonit': {id:'M04', mult:1},
+    'm-abs2': {id:'K01', mult:10},
+    'm-sarke': {id:'O01', mult:1},
+    'm-ladicar': {id:'O02', mult:1}
+  };
+  Object.entries(map).forEach(([inputId, cfg]) => {
+    const val = document.getElementById(inputId).value;
+    if (val !== '') {
+      const item = state.magacin.find(m=>m.id===cfg.id);
+      if (item) item.kolicina = parseFloat(val)*cfg.mult;
+    }
+  });
+  closeMagacinModal();
+  renderMagacin();
+}
+function editMag(id) {
+  const m = state.magacin.find(x=>x.id===id);
+  if (!m) return;
+  const val = prompt(`Nova količina za ${m.naziv} (${m.jed}):`, m.kolicina);
+  if (val!==null && !isNaN(val)) { m.kolicina=parseFloat(val); renderMagacin(); }
+}
+
+// ══════════════════════ NARUDZBE ══════════════════════
+const statusSteps = ['priprema','secenje','sklapanje','montaza'];
+const statusLabels = {priprema:'U pripremi', secenje:'Sečenje', sklapanje:'Sklapanje', montaza:'Montaža'};
+
+function renderNarudzbe() {
+  const today = new Date();
+  const list = document.getElementById('narudzbe-list');
+
+  if (!state.narudzbe.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">◈</div><div class="empty-text">Nema aktivnih narudžbi</div></div>';
+    return;
+  }
+
+  list.innerHTML = state.narudzbe.map(n => {
+    const rok = new Date(n.rok);
+    const dani = Math.ceil((rok - today)/(1000*60*60*24));
+    const kasni = dani < 0;
+    const blizu = dani >= 0 && dani <= 3;
+    const idx = statusSteps.indexOf(n.status);
+
+    const stepsHtml = statusSteps.map((s,i) => {
+      const cls = i<idx?'done':i===idx?'active':'';
+      const conn = i<statusSteps.length-1 ? `<div class="step-connector ${i<idx?'done':''}"></div>` : '';
+      return `<div class="step ${cls}">${i+1}</div>${conn}`;
+    }).join('');
+
+    const bdg = {priprema:'badge-orange', secenje:'badge-blue', sklapanje:'badge-accent', montaza:'badge-green'}[n.status];
+
+    return `<div class="order-card">
+      <div class="order-id">${n.id}</div>
+      <div class="order-info">
+        <div class="order-client">${n.klijent}</div>
+        <div class="order-desc">${n.opis}</div>
+      </div>
+      <div class="order-steps">${stepsHtml}</div>
+      <div><span class="badge ${bdg}">${statusLabels[n.status]}</span></div>
+      <div class="order-deadline ${kasni?'deadline-danger':blizu?'deadline-warn':''}">
+        ${kasni?'⚠ Kasni '+Math.abs(dani)+'d':blizu?'⏰ Za '+dani+'d':'Za '+dani+' dana'}
+        <div style="font-size:11px;margin-top:2px;font-weight:400;">${n.rok}</div>
+      </div>
+      <div class="order-value">${n.vrednost.toLocaleString()} RSD</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-ghost btn-sm" onclick="advanceStatus('${n.id}')">Napreduj →</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteNarudzba('${n.id}')">✕</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('n-total').textContent = state.narudzbe.length;
+  document.getElementById('n-priprema').textContent = state.narudzbe.filter(n=>n.status==='priprema').length;
+  document.getElementById('n-sklapanje').textContent = state.narudzbe.filter(n=>n.status==='sklapanje').length;
+  document.getElementById('n-kasni').textContent = state.narudzbe.filter(n=>new Date(n.rok)<today).length;
+}
+
+function advanceStatus(id) {
+  const n = state.narudzbe.find(x=>x.id===id);
+  if (!n) return;
+  const i = statusSteps.indexOf(n.status);
+  if (i<statusSteps.length-1) { n.status=statusSteps[i+1]; renderNarudzbe(); }
+}
+
+function deleteNarudzba(id) {
+  if (!confirm('Obrisati narudžbu '+id+'?')) return;
+  state.narudzbe = state.narudzbe.filter(n=>n.id!==id);
+  renderNarudzbe();
+}
+
+function openNarudzbinModal() {
+  const d = new Date(); d.setDate(d.getDate()+14);
+  document.getElementById('n-rok').value = d.toISOString().split('T')[0];
+  document.getElementById('narudzba-modal').classList.add('open');
+}
+function closeNarudzbinModal() { document.getElementById('narudzba-modal').classList.remove('open'); }
+function saveNarudzba() {
+  const klijent = document.getElementById('n-klijent').value.trim();
+  if (!klijent) { alert('Unesite ime klijenta'); return; }
+  state.narudzbe.push({
+    id: 'NAR-' + String(state.narudzbe.length+4).padStart(3,'0'),
+    klijent,
+    opis: document.getElementById('n-opis').value || 'Nije specificirano',
+    status: document.getElementById('n-status').value,
+    rok: document.getElementById('n-rok').value,
+    vrednost: +document.getElementById('n-vrednost').value || 0
+  });
+  closeNarudzbinModal();
+  renderNarudzbe();
+}
+
+// ══════════════════════ CENOVNIK ══════════════════════
+function renderCenovnik() {
+  const univers = [
+    {key:'univer_beli', label:'Univer Beli'},
+    {key:'univer_hrast', label:'Univer Hrast'},
+    {key:'univer_antracit', label:'Univer Antracit'},
+  ];
+  document.getElementById('univer-cene').innerHTML = univers.map(u => `
+    <div class="price-row">
+      <span class="price-name">${u.label}</span>
+      <div class="price-input-wrap">
+        <input type="number" id="c-${u.key}" value="${state.cenovnik[u.key]}" />
+        <span class="price-unit">RSD/m²</span>
+      </div>
+    </div>`).join('');
+
+  const pairs = [
+    ['c-medijapan-sirovi','medijapan_sirovi'],['c-medijapan-farb','medijapan_farb'],
+    ['c-lesonit','lesonit'],['c-hdf','hdf'],['c-abs1','abs1'],['c-abs2','abs2'],
+    ['c-sarke','sarke'],['c-ladicar','ladicar'],['c-vodilica','vodilica'],
+    ['c-secenje','secenje'],['c-busenje','busenje'],['c-majstor','majstor']
+  ];
+  pairs.forEach(([iid,key]) => {
+    const el = document.getElementById(iid);
+    if (el) el.value = state.cenovnik[key];
+  });
+}
+
+function sacuvajCene() {
+  ['univer_beli','univer_hrast','univer_antracit'].forEach(k => {
+    const el = document.getElementById('c-'+k);
+    if (el && el.value) state.cenovnik[k] = +el.value;
+  });
+  [['c-medijapan-sirovi','medijapan_sirovi'],['c-medijapan-farb','medijapan_farb'],
+   ['c-lesonit','lesonit'],['c-hdf','hdf'],['c-abs1','abs1'],['c-abs2','abs2'],
+   ['c-sarke','sarke'],['c-ladicar','ladicar'],['c-vodilica','vodilica'],
+   ['c-secenje','secenje'],['c-busenje','busenje'],['c-majstor','majstor']
+  ].forEach(([iid,key]) => {
+    const el = document.getElementById(iid);
+    if (el && el.value) state.cenovnik[key] = +el.value;
+  });
+  const a = document.getElementById('cene-alert');
+  a.style.display = 'flex';
+  setTimeout(() => a.style.display='none', 3000);
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target===o) o.classList.remove('open'); });
+});
+
+// ══════════════════════ PWA SERVICE WORKER ══════════════════════
+if ('serviceWorker' in navigator) {
+  const swCode = `
+const CACHE = 'pf-v1';
+const URLS = [location.href];
+self.addEventListener('install', e => {
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(URLS)));
+  self.skipWaiting();
+});
+self.addEventListener('activate', e => {
+  e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));
+  self.clients.claim();
+});
+self.addEventListener('fetch', e => {
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+    const clone = res.clone();
+    caches.open(CACHE).then(c => c.put(e.request, clone));
+    return res;
+  }).catch(() => caches.match(e.request))));
+});`;
+  const blob = new Blob([swCode], { type: 'application/javascript' });
+  const swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(() => {});
+}
+</script>
+</body>
+</html>
