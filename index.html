@@ -25,6 +25,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 
 .app{max-width:900px;margin:0 auto;padding:0 16px calc(env(safe-area-inset-bottom)+32px);}
 
+/* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top)+14px) 0 14px;border-bottom:1px solid var(--border);margin-bottom:24px;position:sticky;top:0;background:var(--bg);z-index:50;}
 .logo{font-family:var(--mono);font-size:15px;font-weight:600;letter-spacing:-0.3px;}
 .logo-sep{color:var(--subtle);margin:0 5px;font-weight:300;}
@@ -32,17 +33,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .tab{font-family:var(--sans);font-size:12px;font-weight:500;color:var(--muted);border:none;background:none;padding:5px 14px;border-radius:4px;cursor:pointer;transition:all .15s;white-space:nowrap;}
 .tab.on{background:var(--surface);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.08);}
 
+/* PAGES */
 .page{display:none;}
 .page.on{display:block;animation:up .18s ease;}
 @keyframes up{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
 
+/* SECTION */
 .sec{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--subtle);margin:22px 0 10px;display:flex;align-items:center;gap:10px;}
 .sec::after{content:'';flex:1;height:1px;background:var(--border);}
 .sec:first-child{margin-top:0;}
 
+/* CARD */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:12px;}
 .cp{padding:16px;}
 
+/* FORM */
 .fg{display:flex;flex-direction:column;gap:5px;}
 .fl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);}
 .fi,.fs{background:var(--bg);border:1px solid var(--border);border-radius:var(--r-sm);padding:9px 11px;font-family:var(--sans);font-size:13px;color:var(--text);outline:none;width:100%;transition:border-color .15s;-webkit-appearance:none;appearance:none;}
@@ -54,6 +59,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .cb input{width:15px;height:15px;accent-color:var(--text);cursor:pointer;}
 .cb label{font-size:13px;cursor:pointer;user-select:none;}
 
+/* BUTTONS */
 .btn{font-family:var(--sans);font-size:13px;font-weight:500;border:none;border-radius:var(--r-sm);padding:9px 16px;cursor:pointer;transition:all .12s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
 .btn-k{background:var(--text);color:#fff;}.btn-k:active{background:#333;}
 .btn-l{background:var(--hover);color:var(--text);border:1px solid var(--border);}.btn-l:active{background:var(--border);}
@@ -63,6 +69,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .btn-xs{padding:4px 8px;font-size:10px;border-radius:4px;}
 .brow{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;flex-wrap:wrap;}
 
+/* ELEMENT CARDS */
 .el{border:1px solid var(--border);border-radius:var(--r);background:var(--surface);margin-bottom:8px;overflow:hidden;}
 .el-h{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;user-select:none;}
 .el-h:active{background:var(--hover);}
@@ -78,6 +85,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:14
 .el-meta{display:flex;gap:14px;flex-wrap:wrap;padding:8px 14px;background:var(--hover);border-top:1px solid var(--border);font-size:11px;color:var(--muted);font-family:var(--mono);}
 .el-meta b{color:var(--text);font-weight:600;}
 
+/* TABLE */
 .tw{overflow-x:auto;-webkit-overflow-scrolling:touch;}
 table{width:100%;border-collapse:collapse;}
 thead th{padding:7px 12px;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--subtle);border-bottom:1px solid var(--border);background:var(--hover);text-align:left;white-space:nowrap;}
@@ -90,6 +98,7 @@ td.bld{font-weight:600;}
 .tu{display:inline-block;padding:1px 6px;background:var(--hover);border:1px solid var(--border);border-radius:3px;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-family:var(--mono);}
 .tl{display:inline-block;padding:1px 6px;background:var(--amber-bg);border:1px solid rgba(146,64,14,.2);border-radius:3px;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--amber);font-family:var(--mono);}
 
+/* RESULT */
 .rr{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;border-bottom:1px solid var(--border);font-size:13px;}
 .rr:last-child{border-bottom:none;}
 .rl{color:var(--muted);}
@@ -98,6 +107,7 @@ td.bld{font-weight:600;}
 .rt .rl{color:rgba(255,255,255,.55);font-size:12px;}
 .rt .rv{color:#fff;font-size:20px;font-family:var(--mono);}
 
+/* NAB */
 .nr{display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--border);}
 .nr:last-child{border-bottom:none;}
 .ni{font-size:16px;width:28px;text-align:center;flex-shrink:0;}
@@ -108,14 +118,17 @@ td.bld{font-weight:600;}
 .nok{font-size:13px;font-weight:600;color:var(--text);font-family:var(--mono);}
 .nsub{font-size:10px;color:var(--subtle);font-family:var(--mono);}
 
+/* ALERT */
 .alert{display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:var(--r-sm);font-size:12px;margin-bottom:12px;}
 .ag{background:var(--green-bg);color:var(--green);border:1px solid rgba(24,121,78,.15);}
 
+/* RULES */
 .rules{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border-radius:var(--r-sm);overflow:hidden;margin-bottom:14px;}
 .rule{background:var(--surface);padding:10px 12px;}
 .rk{font-size:9px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--subtle);margin-bottom:2px;}
 .rv2{font-size:12px;font-weight:500;font-family:var(--mono);}
 
+/* CENOVNIK */
 .cat{border:1px solid var(--border);border-radius:var(--r);background:var(--surface);margin-bottom:12px;overflow:hidden;}
 .cat-h{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--hover);border-bottom:1px solid var(--border);}
 .cat-t{font-size:12px;font-weight:600;}
@@ -133,8 +146,7 @@ td.bld{font-weight:600;}
 
 .pill-g{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;background:var(--green-bg);color:var(--green);}
 
-@media(min-width:600px){.app{padding:0 24px calc(env(safe-area-inset-bottom)+40px);}}
-</style>
+@media(min-width:600px){.app{padding:0 24px calc(env(safe-area-inset-bottom)+40px);}}</style>
 </head>
 <body>
 <div class="app">
@@ -142,12 +154,12 @@ td.bld{font-weight:600;}
 <div class="topbar">
   <div class="logo">P<span class="logo-sep">/</span>F</div>
   <div class="tabs">
-    <button class="tab on" onclick="sw('kalk',this)">Kalkulator</button>
-    <button class="tab" onclick="sw('cen',this)">Cenovnik</button>
+    <button class="tab on" onclick="switchTab('kalk',this)">Kalkulator</button>
+    <button class="tab" onclick="switchTab('cen',this)">Cenovnik</button>
   </div>
 </div>
 
-<!-- KALKULATOR -->
+<!-- ═══════════ KALKULATOR ═══════════ -->
 <div class="page on" id="page-kalk">
 
   <div class="sec">Postavke</div>
@@ -223,4 +235,278 @@ td.bld{font-weight:600;}
     <div class="card"><div class="tw"><table>
       <thead><tr><th>#</th><th>Element</th><th>Naziv ploče</th><th>Š mm</th><th>V/D mm</th><th>Kom</th><th>m²</th><th>Mat</th></tr></thead>
       <tbody id="spec-all"></tbody>
-    </table></div>
+    </table></div></div>
+
+    <div class="sec">Kalkulacija</div>
+    <div class="card">
+      <div id="kalk-rows"></div>
+      <div class="rt">
+        <span class="rl" id="uk-label">Ukupno</span>
+        <span class="rv" id="uk-val">0 RSD</span>
+      </div>
+    </div>
+
+    <div class="sec" style="justify-content:space-between;">
+      <span>Lista materijala</span>
+      <button class="btn btn-g btn-xs" style="margin-bottom:0;" onclick="kopiraj()">Kopiraj</button>
+    </div>
+    <div class="card"><div id="nab-list"></div></div>
+  </div>
+
+</div>
+
+<!-- ═══════════ CENOVNIK ═══════════ -->
+<div class="page" id="page-cen">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px;">
+    <div>
+      <div style="font-size:20px;font-weight:600;letter-spacing:-.4px;">Cenovnik</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;">Utiče na sve kalkulacije · dodajte vlastite stavke</div>
+    </div>
+    <button class="btn btn-k btn-sm" onclick="sacuvaj()">Sačuvaj cene</button>
+  </div>
+
+  <div id="cene-ok" class="alert ag" style="display:none">✓ Cenovnik sačuvan — kalkulacije ažurirane</div>
+  <div id="kategorije"></div>
+
+</div>
+
+</div><!-- /app -->
+<script>
+// ─── STATE ───────────────────────────────────────────
+let kategorije=[
+  {id:'ploca',naziv:'Pločasti materijali',stavke:[
+    {id:'univer_beli',    naziv:'Univer Beli 18mm',    cena:850, jed:'m²'},
+    {id:'univer_hrast',   naziv:'Univer Hrast 18mm',   cena:950, jed:'m²'},
+    {id:'univer_antracit',naziv:'Univer Antracit 18mm',cena:980, jed:'m²'},
+    {id:'medijapan',      naziv:'Medijapan Farbani',   cena:1400,jed:'m²'},
+    {id:'lesonit',        naziv:'Lesonit 3mm',          cena:350, jed:'m²'},
+  ]},
+  {id:'kant',naziv:'Kant traka',stavke:[
+    {id:'abs_1',naziv:'ABS 1mm',cena:25,jed:'m'},
+    {id:'abs_2',naziv:'ABS 2mm',cena:35,jed:'m'},
+  ]},
+  {id:'okov',naziv:'Okov',stavke:[
+    {id:'sarke',   naziv:'Šarke clip-on',     cena:180, jed:'kom'},
+    {id:'ladicar', naziv:'Ladičar Blum 450mm',cena:2200,jed:'par'},
+    {id:'vodilica',naziv:'Vodilica za vrata', cena:850, jed:'kom'},
+  ]},
+  {id:'usluge',naziv:'Usluge & Rad',stavke:[
+    {id:'secenje',naziv:'Usluga sečenja',cena:25,jed:'m reza'},
+    {id:'busenje',naziv:'Bušenje šarki', cena:50,jed:'kom'},
+    {id:'majstor',naziv:'Rad majstora',  cena:20,jed:'%'},
+  ]},
+];
+let elementi=[];
+
+function gc(id){for(const k of kategorije){const s=k.stavke.find(x=>x.id===id);if(s)return s.cena;}return 0;}
+function gn(id){for(const k of kategorije){const s=k.stavke.find(x=>x.id===id);if(s)return s.naziv;}return id;}
+
+// ─── TABS ─────────────────────────────────────────────
+function switchTab(name,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
+  document.getElementById('page-'+name).classList.add('on');
+  el.classList.add('on');
+  if(name==='cen') renderCen();
+}
+
+// ─── KALKULACIJA ──────────────────────────────────────
+function izr(el){
+  const{sir,vis,dub,fioke,vrata,police,ledja}=el;
+  const d=18,f=4,u=sir-2*d;
+  const pl=[];
+  pl.push({naziv:'Bočna leva', sir:dub,visina:vis,kom:1,mat:'p'});
+  pl.push({naziv:'Bočna desna',sir:dub,visina:vis,kom:1,mat:'p'});
+  pl.push({naziv:'Dno korpusa',sir:u,  visina:dub,kom:1,mat:'p'});
+  if(fioke>0) pl.push({naziv:'Prednja šifonjerka',sir:u,visina:100,kom:1,mat:'p'});
+  else        pl.push({naziv:'Gornja ploča',       sir:u,visina:dub,kom:1,mat:'p'});
+  for(let i=0;i<police;i++) pl.push({naziv:`Polica ${i+1}`,sir:u,visina:dub-d-10,kom:1,mat:'p'});
+  if(ledja) pl.push({naziv:'Leđa (Lesonit)',sir:sir,visina:vis,kom:1,mat:'l'});
+  if(vrata>0) pl.push({naziv:`Front vrata (${vrata}k)`,sir:Math.floor(sir/vrata)-f*2,visina:vis-f*2,kom:vrata,mat:'p'});
+  if(fioke>0){
+    const fv=Math.floor((vis-100)/fioke);
+    pl.push({naziv:`Front fioke (${fioke}k)`,     sir:sir-f*2,visina:fv-f*2,   kom:fioke,  mat:'p'});
+    pl.push({naziv:`Dno fioke (${fioke}k)`,       sir:u-26,   visina:dub-10,  kom:fioke,  mat:'l'});
+    pl.push({naziv:`Stranica fioke (${fioke*2}k)`,sir:dub-10, visina:120,     kom:fioke*2,mat:'p'});
+    pl.push({naziv:`Čelo fioke (${fioke}k)`,      sir:u-26,   visina:120,     kom:fioke,  mat:'p'});
+  }
+  let m2P=0,m2L=0;
+  const proc=pl.map((p,i)=>{const m=(p.sir/1e3)*(p.visina/1e3)*p.kom;if(p.mat==='l')m2L+=m;else m2P+=m;return{...p,m,idx:i+1};});
+  let km=vis*4+u*2;
+  if(vrata>0){const vs=Math.floor(sir/vrata)-f*2,vv=vis-f*2;km+=(vs*2+vv*2)*vrata;}
+  if(fioke>0){const fs=sir-f*2,fvv=Math.floor((vis-100)/fioke)-f*2;km+=(fs*2+fvv*2)*fioke;km+=(u-26)*2*fioke;}
+  for(let i=0;i<police;i++) km+=u;
+  return{ploce:proc,m2P,m2L,kantM:km/1e3};
+}
+
+function dodaj(){
+  const sir=+document.getElementById('el-sir').value;
+  const vis=+document.getElementById('el-vis').value;
+  const dub=+document.getElementById('el-dub').value;
+  if(!sir||!vis||!dub){alert('Unesite širinu, visinu i dubinu.');return;}
+  const te=document.getElementById('el-tip');
+  const naziv=document.getElementById('el-naziv').value.trim()||`${te.options[te.selectedIndex].text} ${sir}×${vis}×${dub}`;
+  elementi.push({id:Date.now(),naziv,tip:te.value,sir,vis,dub,
+    fioke:+document.getElementById('el-fioke').value,
+    vrata:+document.getElementById('el-vrata').value,
+    police:+document.getElementById('el-police').value,
+    ledja:document.getElementById('g-ledja').checked});
+  ['el-naziv','el-sir','el-vis','el-dub'].forEach(x=>document.getElementById(x).value='');
+  ['el-fioke','el-vrata','el-police'].forEach(x=>document.getElementById(x).value='0');
+  render();
+}
+function ukloni(id){elementi=elementi.filter(e=>e.id!==id);render();}
+function tgl(id){const b=document.getElementById('eb-'+id);if(b)b.classList.toggle('on');}
+function clearAll(){if(elementi.length&&!confirm('Obrisati sve?'))return;elementi=[];render();}
+
+function render(){
+  const mat=document.getElementById('g-mat').value;
+  const kant=document.getElementById('g-kant').value;
+  const cP=gc(mat)||850;
+  const cL=gc('lesonit')||350;
+  const cK=gc(kant==='abs_2'?'abs_2':'abs_1')||25;
+  const majPct=(gc('majstor')||20)/100;
+
+  document.getElementById('el-lista').innerHTML=elementi.map((el,idx)=>{
+    const r=izr(el);
+    const iP=Math.round(r.m2P*cP),iL=Math.round(r.m2L*cL),iK=Math.round(r.kantM*cK);
+    const iO=el.fioke*(gc('ladicar')||2200)+el.vrata*2*(gc('sarke')||180);
+    const b=iP+iL+iK+iO;
+    const uk=b+Math.round(b*majPct);
+    const rows=r.ploce.map(p=>`<tr>
+      <td class="dm">${p.idx}</td><td class="bld">${p.naziv}</td>
+      <td class="nm">${p.sir}</td><td class="nm">${p.visina}</td>
+      <td class="nm">${p.kom}</td><td class="nm">${p.m.toFixed(3)}</td>
+      <td><span class="${p.mat==='l'?'tl':'tu'}">${p.mat==='l'?'Lesonit':'Univer'}</span></td>
+    </tr>`).join('');
+    return`<div class="el"><div class="el-h" onclick="tgl(${el.id})">
+      <div class="el-n">${idx+1}</div>
+      <div class="el-i"><div class="el-name">${el.naziv}</div><div class="el-dim">${el.sir}×${el.vis}×${el.dub} mm</div></div>
+      <div class="el-price">${uk.toLocaleString()} RSD</div>
+      <button class="el-del" onclick="event.stopPropagation();ukloni(${el.id})">✕</button>
+    </div>
+    <div class="el-b" id="eb-${el.id}">
+      <div class="el-meta">
+        <span>Univer <b>${r.m2P.toFixed(3)} m²</b></span>
+        ${r.m2L>0?`<span>Lesonit <b>${r.m2L.toFixed(3)} m²</b></span>`:''}
+        <span>Kant <b>${r.kantM.toFixed(2)} m</b></span>
+        ${el.fioke>0?`<span>Ladičari <b>${el.fioke} par</b></span>`:''}
+        ${el.vrata>0?`<span>Šarke <b>${el.vrata*2} kom</b></span>`:''}
+      </div>
+      <div class="tw"><table><thead><tr><th>#</th><th>Naziv ploče</th><th>Š mm</th><th>V/D mm</th><th>Kom</th><th>m²</th><th>Mat</th></tr></thead>
+      <tbody>${rows}</tbody></table></div>
+    </div></div>`;
+  }).join('');
+
+  if(!elementi.length){document.getElementById('rezultati').style.display='none';return;}
+  document.getElementById('rezultati').style.display='block';
+
+  let allRows='',rn=0,totP=0,totL=0,totK=0,totLad=0,totSar=0;
+  elementi.forEach(el=>{
+    const r=izr(el);totP+=r.m2P;totL+=r.m2L;totK+=r.kantM;totLad+=el.fioke;totSar+=el.vrata*2;
+    r.ploce.forEach(p=>{rn++;allRows+=`<tr>
+      <td class="dm">${rn}</td><td class="dm">${el.naziv}</td><td class="bld">${p.naziv}</td>
+      <td class="nm">${p.sir}</td><td class="nm">${p.visina}</td>
+      <td class="nm">${p.kom}</td><td class="nm">${p.m.toFixed(3)}</td>
+      <td><span class="${p.mat==='l'?'tl':'tu'}">${p.mat==='l'?'Lesonit':'Univer'}</span></td>
+    </tr>`;});
+  });
+  document.getElementById('spec-all').innerHTML=allRows;
+
+  const iP=Math.round(totP*cP),iL=Math.round(totL*cL),iK=Math.round(totK*cK);
+  const iO=totLad*(gc('ladicar')||2200)+totSar*(gc('sarke')||180);
+  const baza=iP+iL+iK+iO;
+  const iMaj=Math.round(baza*majPct);
+  const uk=baza+iMaj;
+
+  document.getElementById('kalk-rows').innerHTML=`
+    <div class="rr"><span class="rl">${gn(mat)} — ${totP.toFixed(3)} m²</span><span class="rv">${iP.toLocaleString()} RSD</span></div>
+    ${totL>0?`<div class="rr"><span class="rl">Lesonit 3mm — ${totL.toFixed(3)} m²</span><span class="rv">${iL.toLocaleString()} RSD</span></div>`:''}
+    <div class="rr"><span class="rl">${gn(kant==='abs_2'?'abs_2':'abs_1')} — ${totK.toFixed(2)} m</span><span class="rv">${iK.toLocaleString()} RSD</span></div>
+    ${totLad>0?`<div class="rr"><span class="rl">Ladičar Blum — ${totLad} par</span><span class="rv">${(totLad*(gc('ladicar')||2200)).toLocaleString()} RSD</span></div>`:''}
+    ${totSar>0?`<div class="rr"><span class="rl">Šarke clip-on — ${totSar} kom</span><span class="rv">${(totSar*(gc('sarke')||180)).toLocaleString()} RSD</span></div>`:''}
+    <div class="rr"><span class="rl">Rad majstora — ${gc('majstor')||20}%</span><span class="rv">${iMaj.toLocaleString()} RSD</span></div>`;
+  document.getElementById('uk-label').textContent=`Ukupno · ${elementi.length} ${elementi.length===1?'element':'elemenata'}`;
+  document.getElementById('uk-val').textContent=uk.toLocaleString()+' RSD';
+
+  const nab=[
+    {ic:'🪵',n:gn(mat),    k:totP.toFixed(3),j:'m²'},
+    ...(totL>0?[{ic:'📋',n:'Lesonit 3mm',k:totL.toFixed(3),j:'m²'}]:[]),
+    {ic:'📏',n:gn(kant==='abs_2'?'abs_2':'abs_1'),k:(totK*10).toFixed(1),j:'dm'},
+    ...(totLad>0?[{ic:'🔩',n:'Ladičar Blum',k:totLad,j:'par'}]:[]),
+    ...(totSar>0?[{ic:'🔧',n:'Šarke clip-on',k:totSar,j:'kom'}]:[]),
+  ];
+  window._nab=nab;
+  document.getElementById('nab-list').innerHTML=nab.map(x=>`
+    <div class="nr">
+      <div class="ni">${x.ic}</div>
+      <div class="nf"><div class="nn">${x.n}</div></div>
+      <div class="ns"><div class="nok">${x.k} ${x.j}</div><div class="nsub">potrebno</div></div>
+    </div>`).join('');
+}
+
+function kopiraj(){
+  if(!window._nab)return;
+  const txt='LISTA MATERIJALA\n'+'─'.repeat(28)+'\n'+window._nab.map(x=>`${x.n}: ${x.k} ${x.j}`).join('\n');
+  navigator.clipboard.writeText(txt).then(()=>{const b=event.target;b.textContent='✓';setTimeout(()=>b.textContent='Kopiraj',2e3);});
+}
+
+// ─── CENOVNIK ─────────────────────────────────────────
+function renderCen(){
+  document.getElementById('kategorije').innerHTML=kategorije.map((kat,ki)=>`
+    <div class="cat">
+      <div class="cat-h"><span class="cat-t">${kat.naziv}</span></div>
+      ${kat.stavke.map((s,si)=>`
+        <div class="pr">
+          <span class="pr-n">${s.naziv}</span>
+          <input type="number" class="fi pr-i" id="ci-${ki}-${si}" value="${s.cena}">
+          <span class="pr-u">${s.jed}</span>
+          <button class="pr-del" onclick="delS(${ki},${si})" title="Obriši">✕</button>
+        </div>`).join('')}
+      <div class="add-r">
+        <input type="text"   class="fi"    id="an-${ki}" placeholder="Naziv stavke" style="flex:1;min-width:100px;">
+        <input type="number" class="fi sh" id="ac-${ki}" placeholder="Cena">
+        <input type="text"   class="fi xs" id="aj-${ki}" placeholder="jed.">
+        <button class="btn btn-k btn-sm" onclick="addS(${ki})">+</button>
+      </div>
+    </div>`).join('');
+}
+
+function sacuvaj(){
+  kategorije.forEach((kat,ki)=>{
+    kat.stavke.forEach((s,si)=>{
+      const inp=document.getElementById(`ci-${ki}-${si}`);
+      if(inp&&inp.value) s.cena=+inp.value;
+    });
+  });
+  const ok=document.getElementById('cene-ok');
+  ok.style.display='flex';setTimeout(()=>ok.style.display='none',2500);
+  render();
+}
+
+function addS(ki){
+  const n=document.getElementById(`an-${ki}`).value.trim();
+  const c=+document.getElementById(`ac-${ki}`).value;
+  const j=document.getElementById(`aj-${ki}`).value.trim()||'kom';
+  if(!n||!c){alert('Unesite naziv i cenu.');return;}
+  kategorije[ki].stavke.push({id:'c_'+Date.now(),naziv:n,cena:c,jed:j});
+  document.getElementById(`an-${ki}`).value='';
+  document.getElementById(`ac-${ki}`).value='';
+  document.getElementById(`aj-${ki}`).value='';
+  renderCen();
+}
+
+function delS(ki,si){
+  if(!confirm(`Obrisati "${kategorije[ki].stavke[si].naziv}"?`))return;
+  kategorije[ki].stavke.splice(si,1);renderCen();
+}
+
+// ─── PWA ──────────────────────────────────────────────
+if('serviceWorker' in navigator){
+  const sw=`const C='pf4';self.addEventListener('install',e=>{e.waitUntil(caches.open(C).then(c=>c.addAll([location.href])));self.skipWaiting();});self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==C).map(k=>caches.delete(k)))));self.clients.claim();});self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{const cl=res.clone();caches.open(C).then(c=>c.put(e.request,cl));return res;}).catch(()=>caches.match(e.request))));});`;
+  navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});
+}
+</script>
+</body>
+</html>
